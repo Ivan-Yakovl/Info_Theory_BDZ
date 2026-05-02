@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LZ77 — словарное кодирование</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-orb orb-1"></div><div class="bg-orb orb-2"></div>
+  <header class="hero">
+    <div class="badge">Теория информации • Задание №2</div>
+    <h1>LZ77: кодирование и декодирование</h1>
+    <p>Интерактивная демонстрация словарного сжатия: скользящее окно, буфер просмотра, токены <b>(offset, length, next)</b> и восстановление исходного текста.</p>
+    <div class="hero-actions">
+      <button id="demoBtn" class="btn primary">Заполнить пример</button>
+      <button id="clearBtn" class="btn ghost">Очистить</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card input-card">
+      <div class="card-title"><span>01</span><h2>Входные данные</h2></div>
+      <label>Текст для кодирования</label>
+      <textarea id="inputText" spellcheck="false" placeholder="Введите текст, например: abracadabra abracadabra"></textarea>
+      <div class="grid two">
+        <div><label>Размер словаря</label><input id="dictSize" type="number" min="1" value="12" /></div>
+        <div><label>Размер буфера</label><input id="bufferSize" type="number" min="1" value="8" /></div>
+      </div>
+      <button id="encodeBtn" class="btn primary wide">Закодировать LZ77</button>
+    </section>
+
+    <section class="card">
+      <div class="card-title"><span>02</span><h2>Токены</h2></div>
+      <p class="hint">Каждый токен хранит ссылку назад: насколько далеко отступить, сколько символов взять и какой символ дописать.</p>
+      <div id="tokens" class="tokens empty">Пока нет результата</div>
+      <div class="stats" id="stats"></div>
+    </section>
+
+    <section class="card wide-card">
+      <div class="card-title"><span>03</span><h2>Декодирование и проверка</h2></div>
+      <div class="grid two">
+        <div>
+          <label>JSON токенов</label>
+          <textarea id="tokenJson" spellcheck="false" placeholder="После кодирования здесь появятся токены"></textarea>
+        </div>
+        <div>
+          <label>Восстановленный текст</label>
+          <textarea id="decodedText" readonly></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <button id="decodeBtn" class="btn secondary">Декодировать из JSON</button>
+        <div id="check" class="check">—</div>
+      </div>
+    </section>
+
+    <section class="card wide-card theory">
+      <div class="card-title"><span>04</span><h2>Принцип работы LZ77</h2></div>
+      <ol>
+        <li>Алгоритм просматривает текст слева направо и использует уже обработанную часть как словарь.</li>
+        <li>В начале необработанной части ищется самый длинный фрагмент, который уже встречался раньше.</li>
+        <li>Повтор заменяется токеном <b>(offset, length, next)</b>: отступ назад, длина совпадения и следующий символ.</li>
+        <li>Декодирование выполняется последовательно: по токенам восстанавливается исходная строка.</li>
+      </ol>
+    </section>
+  </main>
+
+  <footer>Готово для запуска в браузере: откройте <b>index.html</b>.</footer>
+  <script src="script.js"></script>
+</body>
+</html>
